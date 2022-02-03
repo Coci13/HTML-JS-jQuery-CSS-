@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    input{
+
+      border: black solid 3px;
+      height: 120px;
+      width: 120px;
+      font-size: 120px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  data = '["bukva", "jazik", "vokal", "misla", "tablo"]';
+  data = JSON.parse(data); //parse
+  let attempt = 0;
+  var randomNum = ((Math.random()*5).toFixed(0));
+
+  let randomString = data[randomNum]; //odbiranje random zbor
+  let randomStringArray = randomString.split("");
+  addAttempt();
+  
+  correct=0;
+  function test() { //test
+    var niza = document.getElementsByClassName('input'+(attempt-1));
+    for(i=0; i<niza.length; i++) {
+      var bukva = niza[i].value;
+      console.log(randomStringArray[i]);
+
+      if(bukva===randomStringArray[i]) {
+        niza[i].style.backgroundColor = "green";
+        correct++;
+      } else if(randomStringArray.includes(""+bukva)) {
+        niza[i].style.backgroundColor = "yellow";
+      }
+    }
+    if(correct===randomString.length)
+      $('body').css("background-color", "green");
+    else {
+      addAttempt();
+      correct = 0;
+    }
+  }
+  function addAttempt() {
+    for(i=0; i<randomString.length; i++) {
+      if(i !== randomString.length-1) {
+        $('<input type="text" class='+"input"+attempt+' >').appendTo('body');
+      } else {
+        $('<input type="text" class='+"input"+attempt+' onchange="test()">' + '<br>').appendTo('body');
+      }
+    }
+    attempt+=1;
+  }
+</script>
+</body>
+</html>
