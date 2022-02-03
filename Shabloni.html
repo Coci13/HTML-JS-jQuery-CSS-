@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>193197</title>
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+
+    <style>
+        label{
+            display: inline-block;
+            width: 100px;
+            text-align: left;
+            margin-top: 5px;
+        }
+        input{
+            margin-top: 5px;
+        }
+        #zacuvaj{
+            margin-top: 25px;
+        }
+        #vneseni-smetki{
+            display: flex;
+        }
+
+        .smetka{
+            margin: 10px;
+            border: 1px solid black;
+            text-align: left;
+            padding-left: 20px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            data = '[{"ime":"Nikola","prezime":"Nikolovski","id":"NNN1asdfgh","promet":"1000"},{"ime":"Nikolina","prezime":"Nikolovska","id":"NNN2asdfgh","promet":"3000"}]';
+            data = JSON.parse(data);
+
+            for(var i=0; i<data.length; i++){
+                var smetka = $("<div class='smetka'></div>");
+                smetka.attr("ime", data[i]["ime"]);
+                smetka.attr("prezime", data[i]["prezime"]);
+                smetka.attr("id", data[i]["id"]);
+                smetka.attr("promet", data[i]["promet"]);
+                napraviSmetka(smetka);
+            }
+
+            function napraviSmetka(smetka) {
+                var br = Math.floor(Math.random() * 99999) + 10000;
+                smetka.attr("broj", br);
+                smetka.css("width", "200px");
+                smetka.css("height", "250px");
+                if(parseInt(smetka.attr("promet")) < 5000)
+                    smetka.css("background-color", "lightgreen");
+                else
+                    smetka.css("background-color", "lightcoral");
+
+                smetka.html("<b>Сметка број:</b> " + br+" <br><b>Име: </b>" + smetka.attr("ime") + "<br> <b>Презиме:</b> " + smetka.attr("prezime") + "<br><b> ID: </b>" + smetka.attr("id")
+                    + "<br><b> Промет:</b> " + smetka.attr("promet") + "<br>");
+
+                var button = $("<button class='btn' style='display: inline-block; margin-top: 30px'>Плати</button>");
+                smetka.append(button);
+
+                $("#vneseni-smetki").append(smetka);
+            }
+
+            $(document).on("click", "#zacuvaj", function () {
+                var idNum = $("#id").val();
+                if(idNum.length!==10){
+                    $("#ime").val("");
+                    $("#prezime").val("");
+                    $("#id").val("");
+                    $("#promet").val("");
+                }else{
+                    var kolkuBrojki = 0;
+                    var golemaBukva = 0;
+                    for(var i=0; i<idNum.length; i++){
+                        if(idNum.charAt(i) >= '0' && idNum.charAt(i) <= '9')
+                            kolkuBrojki++;
+                        else if(idNum.charAt(i) === idNum.charAt(i).toUpperCase())
+                            golemaBukva++;
+
+                    }
+
+                    if(golemaBukva < 3 || kolkuBrojki!==1){
+
+                        $("#ime").val("");
+                        $("#prezime").val("");
+                        $("#id").val("");
+                        $("#promet").val("");
+                    }
+                    else{
+                        var ime = $("#ime").val();
+                        var smetka = $("<div class='smetka'></div>");
+                        smetka.attr("ime", ime);
+                        smetka.attr("prezime", $("#prezime").val());
+                        smetka.attr("id", $("#id").val());
+                        smetka.attr("promet", $("#promet").val());
+                        napraviSmetka(smetka);
+                    }
+                    golemaBukva = 0;
+                    kolkuBrojki = 0;
+
+                }
+
+            });
+
+            $(document).on("click", ".btn", function () {
+                var platena = $("<li></li>");
+                platena.text($(this).parent().attr("broj"));
+                $("#plateni-smetki").append(platena);
+                $(this).parent().fadeOut(2000);
+            })
+
+        })
+
+    </script>
+</head>
+<body>
+<div id="container">
+    <h1>Систем за сметки</h1>
+    <label for="ime">Име:</label>
+    <input id="ime" type="text"><br>
+    <label for="prezime">Презиме:</label>
+    <input id="prezime" type="text"><br>
+    <label for="id">ID:</label>
+    <input id="id" type="text"><br>
+    <label for="promet">Промет:</label>
+    <input id="promet" type="text"><br>
+    <button id="zacuvaj">Зачувај</button>
+    <br><br><br>
+    <h1>Внесени сметки</h1>
+    <div id="vneseni-smetki">
+
+
+    </div>
+    <h1>Платени сметки</h1>
+    <ul id="plateni-smetki">
+
+
+    </ul>
+</div>
+</body>
+</html>
